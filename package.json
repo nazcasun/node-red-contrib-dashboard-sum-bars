@@ -1,0 +1,22 @@
+{
+  "name": "node-red-contrib-dashboard-sum-bars",
+  "version": "0.0.1",
+  "description": "Calculate and display the sum of msg.payload in a bar chart.",
+  "homepage": "https://github.com/nazcasun/node-red-contrib-dashboard-sum-bars",
+  "author": "Fred Huard",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nazcasun/node-red-contrib-dashboard-sum-bars.git"
+  },
+  "node-red": {
+    "nodes": {
+      "sum-bars": "sum-bars.js"
+    }
+  },
+  "keywords": [
+    "node-red",
+    "dashboard",
+    "chart"
+  ]
+}

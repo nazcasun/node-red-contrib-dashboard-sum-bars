@@ -1,0 +1,165 @@
+<script type="text/javascript">
+  RED.nodes.registerType('sum-bars', {
+    category: 'dashboard',
+    color: '#3FADB5',
+    defaults: {
+      name: { value: 'sum-bars' },
+      title: { value: '' },
+      period: { value: 'day' },
+      yMin: { value: 'auto' },      
+      yMax: { value: 'auto' },        
+      showBarsValue: { value: true },      
+      showScaleValue: { value: true },        
+      showSumValue: { value: true },
+      maxBar: { value: 30 , validate:RED.validators.number() },
+      topColor: { value: '#FF0000' },
+      bottomColor: { value: '#FFFF00' },
+      unit: { value: '' },
+      fontColor: { value: '#AAAAAA' },     
+      barStyle: { value: 'Rectangle' } ,
+      decimal: { value: 1 }      
+    },
+    credentials: {
+
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: 'ui_template.png',
+    align: 'right',
+    label: function() {
+      return this.name || 'sum-bars';
+    }
+  });
+</script>
+
+<script type="text/x-red" data-template-name="sum-bars">
+	
+  <div class="form-row">
+      <label for="node-input-name"><i class="fa fa-tag"></i> Node name</label>
+      <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  
+  <div class="form-row">
+      <label for="node-input-title"><i class="fa fa-tag"></i> Title</label>
+      <input type="text" id="node-input-title" placeholder="msg.topic">
+  </div>
+  
+  <div class="form-row">
+      <label for="node-input-period"><i class="fa fa-bar-chart"></i> x-axis</label>
+      <select id="node-input-period">
+		  <option value='hour'>last hour</option>
+		  <option value='day'>last day</option>
+		  <option value='week'>last week</option>
+		  <option value='month'>last month</option>		  
+		  <option value='year'>last year</option>		
+		  <option value='topic'>msg.topic</option>			  	  
+	  </select>	  
+  </div>  
+  
+  <div class="form-row">
+      <label for="node-input-yMin"><i class="fa fa-bar-chart"></i> y-axis</label>
+      min <input type="text" id="node-input-yMin" style="display:inline-block;width:80px" placeholder="auto">&nbsp;
+      max <input type="text" id="node-input-yMax" style="display:inline-block;width:80px" placeholder="auto">&nbsp;
+  </div>   
+  <hr>
+  
+  <div class="form-row">
+      <label for="node-input-barStyle</label>"><i class="fa fa-bars"></i> Bar style</label>
+      <select id="node-input-barStyle">
+		  <option value='Rectangle'>rectangle</option>
+		  <option value='Equalizer'>equalizer</option>	  	  
+	  </select>	  
+  </div>    
+  
+  <div class="form-row">
+      <label for="node-input-maxBar"><i class="fa fa-arrows-v"></i> Bar lines</label>
+      <input type="text" id="node-input-maxBar" placeholder="30" style="width:50px">
+  </div>
+  
+  <div class="form-row">
+      <label for="node-input-topColor"><i class="fa fa-paint-brush"></i> Bar colors</label>
+      top <input type="color" id="node-input-topColor" class="gauge-color"/>
+      bottom <input type="color" id="node-input-bottomColor" class="gauge-color"/>
+  </div>
+  
+  <hr>
+  
+  <div class="form-row" align=left>
+      <label><i class="fa fa-eye-slash"></i> Display</label>
+      <div>&nbsp;&nbsp;<input type="checkbox" id="node-input-showBarsValue" checked style="display:inline-block; width:20px; vertical-align:baseline;">&nbsp;bar values</div>     
+      <div>&nbsp;&nbsp;<input type="checkbox" id="node-input-showScaleValue" checked style="display:inline-block; width:20px; vertical-align:baseline;">&nbsp;x-axis values</div>     
+      <div>&nbsp;&nbsp;<input type="checkbox" id="node-input-showSumValue" checked style="display:inline-block; width:20px; vertical-align:baseline;">&nbsp;chart sum</div>
+  </div>
+  
+  <div class="form-row">
+      <label for="node-input-unit"><i class="fa fa-bookmark-o"></i> Unit</label>
+      <input type="text" id="node-input-unit" style="width:50px" />
+  </div>
+  
+  <div class="form-row">
+      <label for="node-input-decimal"><i class="fa fa-tachometer"></i> Decimals</label>
+      <select id="node-input-decimal">
+		  <option value='0'>0</option>
+		  <option value='1'>1</option>	 
+		  <option value='2'>2</option>			   	  
+	  </select>	  
+  </div>  
+  
+  <div class="form-row">
+      <label for="node-input-fontColor"><i class="fa fa-paint-brush"></i> Font color</label>
+      <input type="color" id="node-input-fontColor"  class="gauge-color"/>
+  </div>  
+
+</script>
+
+<script type="text/x-red" data-help-name="sum-bars">
+  <p>Display the sum of <code>msg.payload</code> in a node-red dashboard bar chart.</p>
+
+  <dl>Important<dd>The sum-bars node is necessarily linked to the node-red dashboard template node.
+    The sum-bars node create the input msg of the template node and the template node display the chart.</dd>
+  </dl>
+
+  <h3>Note</h3>
+    <dl class="message-properties">
+      <dd> sum-bars node values can be cleared by sending the string "clear" in the msg.payload.
+        <br>
+        Node-red reboot: keep the node values by storing the context values ( see <code>contextStorage</code> attribute in settings.js )
+      </dd>  
+    </dl>
+
+  <h3>Node properties :</h3>
+    <dl class="message-properties">
+      <dt>X-axis
+        <dd>
+  <li>last hour : 1 bar per minute</li> 
+  <li>last day : 1 bar per hour</li>   
+  <li>last week : 1 bar per day</li>   
+  <li>last month : 1 bar per day </li>   
+  <li>last year : 1 bar per month</li>   
+  <li>msg.topic : 1 bar for each msg.topic</li>   
+  </dd>
+  </dt>
+  <dt>Y-axis
+   <dd>"auto" : is calculated according to the msg.payload received.</dd>
+  </dt>  
+  <dt>Bar style
+  <dd>
+  <li>rectangle : classical bar</li>
+  <li>equalizer : equalizer bar style</li>
+  </dd
+  </dt>
+  <dt>Bar colors
+  <dd>choice the color gradient of the bars</dd>
+  </dt>
+  <dt>Display values
+  <dd>check boxes to display or hide values :
+  <li>bar values : value above the bar </li>
+  <li>x-axis values : period values (or msg.topic if x-axis = msg.topic )</li>
+  <li>chart sum : the average of all values received</li>
+  </dd>
+  </dt>
+  <dt>Unit<dd>unit to display behind values</dd></dt>
+  <dt>Decimals<dd>number of decimals to display</dd></dt>
+  <dt>Font color<dd>color of the scale and the values</dd></dt>
+  </dl>
+</script>
